@@ -1,0 +1,28 @@
+.mapDiv {
+    height: 80%;
+    width: 100%;
+}
+
+.grid {
+    margin: 10px;
+    width: 100%;
+    background:#b0d25a;
+}
+
+.datatable {
+    border:1px solid #000000;
+    width:200px;
+}
+.datatable td {
+    background:#FFFFFF;
+    border:1px solid #000000;
+}
+.datatable th {
+    background:#8cb03e;
+    border:1px solid #000000;
+    padding: 5px;
+}
+
+.clickedRow {
+    color:#008000;
+}
