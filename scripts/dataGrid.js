@@ -3,7 +3,8 @@ function DataGrid (containerId) {
             gridContainer = document.getElementById(containerId),
             domTble = document.createElement('table'),
             domTbleBody = document.createElement('tbody'),
-            domTbleHead = document.createElement('thead');
+            domTbleHead = document.createElement('thead'),
+            canLoadMoreData = true;
 
         domTble.style = 'width:100%';
         domTble.align = 'center';
@@ -57,6 +58,7 @@ function DataGrid (containerId) {
 
        buildBody = (id) => {
             that = this;
+            
             getData('http://jiujitsuteam.herokuapp.com/teams/' + id + '.json').then((item) => {
                 if(item.places.length > 0) {
                     for (let j = 0; j < item.places.length; j++) {
@@ -94,6 +96,13 @@ function DataGrid (containerId) {
                         buildBody(id + 1)
                     }
                 }
+            }, (error) => {
+                if(error == "No data") {
+                    canLoadMoreData = false;
+                    document.getElementById("infiniteScroll").innerHTML = "No more data... :("
+                } else {
+                    throw error
+                }
             });
             lastItem = id + 1;
         }
@@ -116,7 +125,7 @@ function DataGrid (containerId) {
         }
 
         initInfiniteScroll = () => {
-            offsetForNewContent = document.querySelector("#map").clientHeight + 20;
+            offsetForNewContent = document.querySelector("#map").clientHeight + 60;
 
             function checkInfiniteScroll(parentSelector, childSelector) {
                 
@@ -124,7 +133,7 @@ function DataGrid (containerId) {
                   lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight,
                   pageOffset = window.pageYOffset + window.innerHeight;
 
-              if((pageOffset > lastDivOffset + offsetForNewContent) && lastItem < 12) {
+              if((pageOffset > lastDivOffset + offsetForNewContent) ) {
                 buildBody(lastItem);
               }
             }
@@ -140,7 +149,7 @@ function DataGrid (containerId) {
               requestAnimationFrame(update);
 
               var currScrollTime = Date.now();
-              if(lastScrollTime + checkInterval < currScrollTime) {
+              if((lastScrollTime + checkInterval < currScrollTime) && canLoadMoreData) {
                 checkInfiniteScroll("tbody", "> tr:last-child");
                 lastScrollTime = currScrollTime;
               }
