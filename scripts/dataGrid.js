@@ -19,7 +19,7 @@ function DataGrid(containerId) {
             (resolve, reject) => {
                 xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.open('GET', "https://crossorigin.me/" + url, asyn);
-                xmlHttpRequest.onreadystatechange = function() {
+                xmlHttpRequest.onreadystatechange = () => {
                     if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == "200") {
                         resolve(JSON.parse(xmlHttpRequest.responseText));
                     } else {
@@ -58,12 +58,12 @@ function DataGrid(containerId) {
                         let tr = domTbleBody.insertRow();
                         tr.align = 'center';
 
-                        tr.onclick = function() {
+                        tr.onclick = () => {
                             if (document.querySelector('.clickedRow')) {
                                 document.querySelector('.clickedRow').classList.remove("clickedRow")
                             }
 
-                            this.classList.add('clickedRow');
+                            tr.classList.add('clickedRow');
                             item.places[j].teamName = item.name;
                             that.onRowClick(item.places[j]);
                         }
@@ -79,8 +79,11 @@ function DataGrid(containerId) {
                 let tr = domTbleBody.insertRow();
                 tr.align = 'center';
 
-                tr.onclick = function() {
-                    this.classList.add('clickedRow');
+                tr.onclick = () => {
+                    if (document.querySelector('.clickedRow')) {
+                                document.querySelector('.clickedRow').classList.remove("clickedRow")
+                    }
+                    tr.classList.add('clickedRow');
                 }
 
                 createColumns(tr, [item.name, "-", "-", "-"]);
@@ -120,7 +123,7 @@ function DataGrid(containerId) {
     initInfiniteScroll = () => {
         offsetForNewContent = document.querySelector("#map").clientHeight + 60;
 
-        function checkInfiniteScroll(parentSelector, childSelector) {
+        checkInfiniteScroll = (parentSelector, childSelector) => {
 
             var lastDiv = document.querySelector(parentSelector + childSelector),
                 lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight,
@@ -138,7 +141,7 @@ function DataGrid(containerId) {
          * The method requestAnimationFrame is the secret of the infinite scroll
          * https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
          **/
-        function update() {
+        update = () => {
             requestAnimationFrame(update);
 
             var currScrollTime = Date.now();
