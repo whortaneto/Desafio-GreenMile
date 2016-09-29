@@ -1,6 +1,6 @@
 # [GreenMile Challenge]
 
-[![GitHub release](https://img.shields.io/github/release/mmistakes/minimal-mistakes.svg)](https://github.com/mmistakes/minimal-mistakes/releases)
+[![GitHub release]
 
 This project is a challenge proposed by GreenMile.
 
