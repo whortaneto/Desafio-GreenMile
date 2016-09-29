@@ -28,5 +28,5 @@ The callenge consists in do a simple web page with some properties:
   
 - style.css
 
-##How to run
+##[How to run]
 To run this application you can just execute the index.html file in your browser.
