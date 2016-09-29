@@ -21,7 +21,7 @@ function DataGrid (containerId) {
                         if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == "200") {
                             resolve(JSON.parse(xmlHttpRequest.responseText));
                         } else {
-                            reject('No more data');
+                            reject('No data');
                         }
                     };
                     xmlHttpRequest.send();
@@ -56,7 +56,7 @@ function DataGrid (containerId) {
         }
 
        buildBody = (id) => {
-        that = this;
+            that = this;
             getData('http://jiujitsuteam.herokuapp.com/teams/' + id + '.json').then((item) => {
                 if(item.places.length > 0) {
                     for (let j = 0; j < item.places.length; j++) {
@@ -95,6 +95,7 @@ function DataGrid (containerId) {
                     }
                 }
             });
+            lastItem = id + 1;
         }
 
         buildNodes = () => {
@@ -115,7 +116,7 @@ function DataGrid (containerId) {
         }
 
         initInfiniteScroll = () => {
-            offsetForNewContent = 450;
+            offsetForNewContent = document.querySelector("#map").clientHeight + 20;
 
             function checkInfiniteScroll(parentSelector, childSelector) {
                 
@@ -123,7 +124,7 @@ function DataGrid (containerId) {
                   lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight,
                   pageOffset = window.pageYOffset + window.innerHeight;
 
-              if(pageOffset > lastDivOffset + offsetForNewContent) {
+              if((pageOffset > lastDivOffset + offsetForNewContent) && lastItem < 12) {
                 buildBody(lastItem);
               }
             }
