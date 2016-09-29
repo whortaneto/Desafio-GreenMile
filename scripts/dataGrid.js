@@ -1,6 +1,9 @@
 function DataGrid(containerId) {
-    let data = [],
-        items, pagination, lastItem,
+
+    const JIUJITSU_TEAM = 'http://jiujitsuteam.herokuapp.com/teams/',
+          CROSS_ORIGIN = 'https://crossorigin.me/';
+
+    let items, pagination, lastItem,
         gridContainer = document.getElementById(containerId),
         domTble = document.createElement('table'),
         domTbleBody = document.createElement('tbody'),
@@ -11,14 +14,13 @@ function DataGrid(containerId) {
     domTble.align = 'center';
     domTble.classList.add('datatable');
 
-    this.dataSource;
     this.onRowClick;
 
     getData = (url, asyn) => {
         return new Promise(
             (resolve, reject) => {
                 xmlHttpRequest = new XMLHttpRequest();
-                xmlHttpRequest.open('GET', "https://crossorigin.me/" + url, asyn);
+                xmlHttpRequest.open('GET', CROSS_ORIGIN + url, asyn);
                 xmlHttpRequest.onreadystatechange = () => {
                     if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == "200") {
                         resolve(JSON.parse(xmlHttpRequest.responseText));
@@ -51,65 +53,68 @@ function DataGrid(containerId) {
     buildBody = (id) => {
         that = this;
 
-        getData('http://jiujitsuteam.herokuapp.com/teams/' + id + '.json').then((item) => {
-            if (item.places.length > 0) {
-                for (let j = 0; j < item.places.length; j++) {
-                    if (domTbleBody.childElementCount < pagination) {
-                        let tr = domTbleBody.insertRow();
-                        tr.align = 'center';
-
-                        tr.onclick = () => {
-                            if (document.querySelector('.clickedRow')) {
-                                document.querySelector('.clickedRow').classList.remove("clickedRow")
-                            }
-
-                            tr.classList.add('clickedRow');
-                            item.places[j].teamName = item.name;
-                            that.onRowClick(item.places[j]);
-                        }
-
-                        createColumns(tr, [item.name, item.places[j].gym.title,
-                            item.places[j].gym.address, item.creator.name
-                        ]);
-                    } else {
-                        break;
-                    }
-                }
-            } else {
-                let tr = domTbleBody.insertRow();
-                tr.align = 'center';
-
-                tr.onclick = () => {
-                    if (document.querySelector('.clickedRow')) {
-                                document.querySelector('.clickedRow').classList.remove("clickedRow")
-                    }
-                    tr.classList.add('clickedRow');
-                }
-
-                createColumns(tr, [item.name, "-", "-", "-"]);
-
-                if (domTbleBody.childElementCount < (pagination + pagination)) {
-                    buildBody(id + 1)
-                }
-            }
+        getData(JIUJITSU_TEAM + id + '.json').then((item) => {
+            if (item.places.length > 0)
+                buildGymRow(item);
+            else
+                buildTeamRows(id, item);
         }, (error) => {
             if (error == "No data") {
                 canLoadMoreData = false;
                 document.getElementById("infiniteScroll").innerHTML = "No more data... :("
             } else {
-                throw error
+                throw error;
             }
         });
         lastItem = id + 1;
     }
 
+    buildGymRow = (item) => {
+        for (let j = 0; j < item.places.length; j++) {
+            if (domTbleBody.childElementCount < pagination) {
+                let tr = domTbleBody.insertRow();
+                tr.align = 'center';
+
+                tr.onclick = () => {
+                    if (document.querySelector('.clickedRow')) {
+                        document.querySelector('.clickedRow').classList.remove("clickedRow")
+                    }
+
+                    tr.classList.add('clickedRow');
+                    item.places[j].teamName = item.name;
+                    that.onRowClick(item.places[j]);
+                }
+
+                createColumns(tr, [item.name, item.places[j].gym.title,
+                    item.places[j].gym.address, item.creator.name
+                ]);
+            } else {
+                break;
+            }
+        }
+    }
+
+    buildTeamRows = (id, item) => {
+        let tr = domTbleBody.insertRow();
+        tr.align = 'center';
+
+        tr.onclick = () => {
+            if (document.querySelector('.clickedRow')) {
+                        document.querySelector('.clickedRow').classList.remove("clickedRow")
+            }
+            tr.classList.add('clickedRow');
+        }
+
+        createColumns(tr, [item.name, "-", "-", "-"]);
+
+        if (domTbleBody.childElementCount < (pagination + pagination)) {
+            buildBody(id + 1)
+        }
+    }
+
     buildNodes = () => {
         buildHeader();
         buildBody(2);
-    }
-
-    this.setDataSource = url => {
-        this.dataSource = url;
     }
 
     this.setItems = array => {
@@ -125,7 +130,7 @@ function DataGrid(containerId) {
 
         checkInfiniteScroll = (parentSelector, childSelector) => {
 
-            var lastDiv = document.querySelector(parentSelector + childSelector),
+            let lastDiv = document.querySelector(parentSelector + childSelector),
                 lastDivOffset = lastDiv.offsetTop + lastDiv.clientHeight,
                 pageOffset = window.pageYOffset + window.innerHeight;
 
@@ -134,7 +139,7 @@ function DataGrid(containerId) {
             }
         }
 
-        var lastScrollTime = Date.now();
+        let lastScrollTime = Date.now();
         const checkInterval = 50;
 
         /*
@@ -144,12 +149,12 @@ function DataGrid(containerId) {
         update = () => {
             requestAnimationFrame(update);
 
-            var currScrollTime = Date.now();
+            let currScrollTime = Date.now();
             if ((lastScrollTime + checkInterval < currScrollTime) && canLoadMoreData) {
                 checkInfiniteScroll("tbody", "> tr:last-child");
                 lastScrollTime = currScrollTime;
             }
-        };
+        }
 
         update();
     }

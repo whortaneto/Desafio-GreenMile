@@ -30,6 +30,7 @@
     border:1px solid #000000;
 }
 .datatable td {
+    cursor:pointer;
     background:#FFFFFF;
     border:1px solid #000000;
 }
