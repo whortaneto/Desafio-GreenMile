@@ -30,3 +30,5 @@ The callenge consists in do a simple web page with some properties:
 
 ##[How to run]
 To run this application you can just execute the index.html file in your browser.
+
+ -- <cite>Wagner Horta</cite>
