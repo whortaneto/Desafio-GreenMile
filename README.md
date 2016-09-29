@@ -1,7 +1,4 @@
 # [GreenMile Challenge]
-
-[![GitHub release]
-
 This project is a challenge proposed by GreenMile.
 
 The callenge consists in do a simple web page with some properties:
