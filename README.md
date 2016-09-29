@@ -27,3 +27,6 @@ The callenge consists in do a simple web page with some properties:
   Css used by the leaflet library to build the map.
   
 - style.css
+
+##How to run
+To run this application you can just execute the index.html file in your browser.
