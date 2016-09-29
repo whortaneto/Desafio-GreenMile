@@ -1,5 +1,5 @@
 window.onload = () => {
-    const loadMapBox = () => {
+    const createMapBox = () => {
         let mymap = L.map('map').setView([-3.734464116057717,-38.46957206726074], 14);
         const STYLE_KEY = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw';
 
@@ -11,7 +11,7 @@ window.onload = () => {
         return mymap;
     }
     
-    const loadDataGrid = mymap => {
+    const createDataGrid = mymap => {
         const grid = new DataGrid('dataGrid');
         grid.setItems(["Escola", "Equipe", "Endereco", "Instrutor"]);
         grid.setPagination(3);
@@ -26,6 +26,6 @@ window.onload = () => {
         grid.render();
     }
 
-    const mymap = loadMapBox(); 
-    loadDataGrid(mymap);
+    const mymap = createMapBox(); 
+    createDataGrid(mymap);
 };

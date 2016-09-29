@@ -55,7 +55,7 @@ function DataGrid(containerId) {
 
         getData(JIUJITSU_TEAM + id + '.json').then((item) => {
             if (item.places.length > 0)
-                buildGymRow(item);
+                buildGymRows(item);
             else
                 buildTeamRows(id, item);
         }, (error) => {
@@ -69,7 +69,7 @@ function DataGrid(containerId) {
         lastItem = id + 1;
     }
 
-    buildGymRow = (item) => {
+    buildGymRows = (item) => {
         for (let j = 0; j < item.places.length; j++) {
             if (domTbleBody.childElementCount < pagination) {
                 let tr = domTbleBody.insertRow();
